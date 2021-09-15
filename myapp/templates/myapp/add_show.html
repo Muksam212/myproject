@@ -1,0 +1,63 @@
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+<div class="main">
+	<h3 class="text-left"> Add Student </h3>
+</div>
+<div class="row justify-content-around">
+	<div class="col-sm-3">
+		<form method="POST">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-primary" role="alert">
+  						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="submit" class="btn btn-primary my-3 ">
+		</form>
+	</div>
+	<div class="col-sm-6">
+		<h3 class="text-right"> Show Student Information</h3>
+		{% if std %}
+		<table class="table">
+	  <thead>
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">name</th>
+	      <th scope="col">address</th>
+	      <th scope="col">email</th>
+	      <th scope="col"> Edit </th>
+	      <th scope="col"> Delete </th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for st in std %}
+	    <tr>
+	      <th scope="row">{{ st.id }}</th>
+	      <td>{{ st.name }}</td>
+	      <td>{{ st.address }}</td>
+	      <td>{{ st.email }}</td>
+	      <td>
+	      	<a href="{% url 'update' st.id %}" class="btn btn-warning btn-sm p-2"> Edit </a>
+	      </td>
+	      <td>
+	      	<form method="POST" action="{% url 'delete' st.id %}" class="d-inline">
+	      		{% csrf_token %}
+	      	<input type="submit" class="btn btn-danger" value="Delete">
+	      	</form>
+	      </td>
+	    </tr>
+	    {% endfor %}
+	  </tbody>
+	</table>
+
+		{% else %}
+		<h3 class="text-center alert alert-warning"> No Record </h3>
+
+		{% endif %}
+	</div>
+</div>
+{% endblock content %}
